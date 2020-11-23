@@ -1,0 +1,17 @@
+SELECT nom, description FROM produits;
+
+SELECT nom FROM produits WHERE abandon = 1;
+
+DELETE clients FROM clients INNER JOIN raisonsociale ON clients.id_raisonsociale = raisonsociale.id_raisonsociale INNER JOIN villes ON clients.ville = villes.id_ville WHERE raisonsociale.nom_raisonsociale = 'Bo Meuble' AND villes.ville = 'Brest';
+
+UPDATE produits SET produits.nom = "Apfelgluck" WHERE produits.nom = "Apfelgluk";
+
+INSERT INTO clients (id_type, id_raisonsociale, adresse, ville, pays) SELECT (SELECT id_type FROM type WHERE type.nom_type = 'Magasin'), (SELECT id_raisonsociale FROM raisonsociale WHERE raisonsociale.nom_raisonsociale = 'Tout à la maison'), ('Place Terreaux'), (SELECT id_ville FROM villes WHERE villes.ville = 'Lyon'), (SELECT id_pays FROM pays WHERE pays.pays = 'France');
+
+INSERT INTO factures (factures.numero, factures.date, factures.id_clients) SELECT ("MSQ298"), ("2018-08-28"), (SELECT id_clients FROM clients INNER JOIN raisonsociale ON clients.id_raisonsociale = raisonsociale.id_raisonsociale JOIN villes ON clients.ville = villes.id_ville WHERE raisonsociale.nom_raisonsociale = 'Tout à la maison' AND villes.ville = 'Lyon');
+
+INSERT INTO prod_factures (id_produits, id_facture, quantite) SELECT (SELECT id_produits FROM produits WHERE produits.nom = 'Naess'), (SELECT id_facture FROM factures WHERE factures.numero = 'MSQ298'), (18);
+
+SELECT produits.nom, prod_factures.quantite, factures.numero, raisonsociale.nom_raisonsociale, villes.ville FROM prod_factures JOIN factures ON prod_factures.id_facture = factures.id_facture JOIN produits ON prod_factures.id_produits = produits.id_produits JOIN clients ON factures.id_clients = clients.id_clients JOIN raisonsociale ON clients.id_raisonsociale = raisonsociale.id_raisonsociale JOIN villes ON clients.ville = villes.id_ville WHERE villes.ville = 'Paris' AND raisonsociale.nom_raisonsociale = 'Bo meuble';
+
+SELECT id_facture FROM factures WHERE date >= '2018-07-01';
